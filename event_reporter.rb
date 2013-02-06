@@ -68,7 +68,7 @@ class EventReporter
 		if key == ""
 			@help.each { |key, value| puts "#{key.ljust(15)}: #{value}" }
 		else 
-			puts @help[key.to_sym]
+			puts @help[key]
 		end
 	end
 
@@ -91,7 +91,7 @@ class EventReporter
 			when "queue" then
 				queue_command = @parts[1]
 				process_queue_command(queue_command)
-			when "help" then help(@parts[1..-1].join("_"))
+			when "help" then help(@parts[1].to_s)
 			else puts "Sorry, I don't know how to '#{command}'"
 			end
 		end

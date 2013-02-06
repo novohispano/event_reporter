@@ -2,7 +2,6 @@
 
 load						: Erase any loaded data and parse the specified file. If no filename is given default to event_attendees.csv.
 help						: Output a listing of the available individual commands.
-help						: Output a description of how to use the specific command.
 queue_count			: Output how many records are in the current queue.
 queue_clear			: Empty the queue.
 queue_print 		: Print out a tab-delimited data table with a header row.
