@@ -1,6 +1,6 @@
 require "csv"
 require "yaml"
-require "pry"
+require "debugger"
 require_relative "phone"
 require_relative "zipcode"
 require_relative "queue"
@@ -14,9 +14,9 @@ class EventReporter
 		puts "Initializing Event Reporter..."
 		@contents
 		@parts
+		@queue = Queue.new
 		@attendees = []
 		@help = YAML.load_file('help.yml')
-		@queue = Queue.new(@attendees)
 	end
 
 	def load(file)
@@ -25,10 +25,7 @@ class EventReporter
 		else
 			file
 		end
-
 		@contents = CSV.open(file, :headers => true)
-		@contents.rewind
-
 		@contents.each do |line|
 			first_name = line["first_Name"]
 			last_name = line["last_Name"]
@@ -39,7 +36,7 @@ class EventReporter
 			state = line["State"].to_s
 			zipcode = ZipCode.new(line["Zipcode"])
 			attendee = Attendee.new(first_name, last_name, email, phone, street, city, state, zipcode)
-			@attendees << attendee
+			attendees << attendee
 		end
 	end
 
@@ -50,7 +47,7 @@ class EventReporter
 			File.open(file, 'w') do |file|
 				file.puts "1,LAST NAME,FIRST NAME,EMAIL,ZIPCODE,CITY,STATE,ADDRESS,PHONE"
 				id = 0
-				@attendees.each do |attendee|
+				@queue.each do |attendee|
 					id = id + 1
 					file.puts "#{id},#{attendee.last_name},#{attendee.first_name},#{attendee.email},#{attendee.zipcode},#{attendee.city},#{attendee.state},#{attendee.street},#{attendee.phone}"
 				end
@@ -61,7 +58,7 @@ class EventReporter
 	def print_table(contents)
 		puts "1".ljust(10, " ") + "LAST NAME".ljust(20, " ") + "FIRST NAME".ljust(15, " ") + "EMAIL".ljust(45, " ") + "ZIPCODE".ljust(10, " ") + "CITY".ljust(25, " ") + "STATE".ljust(7, " ") + "ADDRESS".ljust(55, " ") + "PHONE".ljust(10, " ")
 		id = 0
-		@attendees.each do |attendee|
+		@queue.each do |attendee|
 			id = id + 1
 			puts "#{id}".ljust(10) + "#{attendee.last_name}".ljust(20) + "#{attendee.first_name}"[0..10].ljust(15) + "#{attendee.email}".ljust(45) + "#{attendee.zipcode}".ljust(10) + "#{attendee.city}".ljust(25) + "#{attendee.state}".ljust(5) + "#{attendee.street}"[0..55].ljust(60) + "#{attendee.phone}".ljust(10)
 		end
@@ -76,8 +73,7 @@ class EventReporter
 	end
 
 	def find(attribute, criteria)
-		@attendees = @attendees.select{|attendee| attendee.send(attribute) == criteria}
-		print_table(@attendees)
+		@queue.add(attendees.select{|attendee| attendee.send(attribute) == criteria})
 	end
 
 	def run
@@ -105,19 +101,19 @@ class EventReporter
 		case print_command
 		when nil then @queue.print
 		when "by" then @queue.print_by(@parts[3])
-		else puts "Sorry, I don't know how to '#{command}'"
+		else puts "Sorry, I don't know how to '#{print_command}'"
 		end
 	end
 
 	def process_queue_command(queue_command)
 		case queue_command
-		when "count" then puts @queue.count
+		when "count" then @queue.count
 		when "clear" then @queue.clear
 		when "save" then save(@parts[3])
 		when "print" then
 			print_command = @parts[2]
 			process_print_command(print_command)
-		else puts "Sorry, I don't know how to '#{command}'"
+		else puts "Sorry, I don't know how to '#{queue_command}'"
 		end
 	end
 end
