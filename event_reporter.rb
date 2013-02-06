@@ -15,7 +15,6 @@ class EventReporter
 		@contents
 		@parts
 		@queue = Queue.new
-		@attendees = []
 		@help = YAML.load_file('help.yml')
 	end
 
@@ -25,6 +24,7 @@ class EventReporter
 		else
 			file
 		end
+		@attendees = []
 		@contents = CSV.open(file, :headers => true)
 		@contents.each do |line|
 			first_name = line["first_Name"]
@@ -49,7 +49,15 @@ class EventReporter
 	end
 
 	def find(attribute, criteria)
-		@queue.add(attendees.select{|attendee| attendee.send(attribute) == criteria})
+		begin
+			@queue.add(attendees.select{|attendee| attendee.send(attribute) == criteria})
+		rescue
+			if attendees == nil
+				puts "You have not loaded any data yet."
+			else
+				puts "There was a problem with your request."
+			end
+		end
 	end
 
 	def run
@@ -85,7 +93,7 @@ class EventReporter
 		case queue_command
 		when "count" then @queue.count
 		when "clear" then @queue.clear
-		when "save" then save(@parts[3])
+		when "save" then @queue.save(@parts[3])
 		when "print" then
 			print_command = @parts[2]
 			process_print_command(print_command)
