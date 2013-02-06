@@ -1,11 +1,17 @@
 class ZipCode
+	include Comparable
+  attr_reader :zipcode
 
 	def initialize(zipcode)
 		@zipcode = zipcode
 	end
 
 	def to_s
-    clean
+	clean
+  end
+
+  def <=>(other)
+	zipcode.to_s <=> other.zipcode.to_s
   end
 
 	def clean
