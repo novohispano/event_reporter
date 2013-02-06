@@ -44,11 +44,16 @@ class EventReporter
 	end
 
 	def save(file)
-		if file == nil
+		if file == ""
 			puts "I am sorry, but you did not specify a file to save the data."
 		else
 			File.open(file, 'w') do |file|
-			print_table(@attendee)
+				file.puts "1,LAST NAME,FIRST NAME,EMAIL,ZIPCODE,CITY,STATE,ADDRESS,PHONE"
+				id = 0
+				@attendees.each do |attendee|
+					id = id + 1
+					file.puts "#{id},#{attendee.last_name},#{attendee.first_name},#{attendee.email},#{attendee.zipcode},#{attendee.city},#{attendee.state},#{attendee.street},#{attendee.phone}"
+				end
 			end
 		end
 	end
