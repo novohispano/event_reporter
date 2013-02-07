@@ -17,18 +17,18 @@ class Phone
 	def clean
 		phone_length = @phone.length
 		case phone_length
-			when 0..9
-				invalid_number
-			when 10
-				@phone
-			when 11
-				if @phone[0] == "1"
-					@phone = @phone[1..-1]
-				else
-					invalid_number
-				end
+		when 0..9
+			invalid_number
+		when 10
+			@phone
+		when 11
+			if @phone[0] == "1"
+				@phone = @phone[1..-1]
 			else
 				invalid_number
+			end
+		else
+			invalid_number
 		end
 	end
 

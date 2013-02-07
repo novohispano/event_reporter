@@ -10,7 +10,7 @@ class Queue
 	end
 
 	def count
-			puts "There are #{queue_data.size} records in your queue."
+		puts "There are #{queue_data.size} records in your queue."
 	end
 
 	def clear
