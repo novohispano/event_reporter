@@ -10,7 +10,16 @@ require_relative "first_name"
 require_relative "last_name"
 require_relative "city"
 
-Attendee = Struct.new(:first_name, :last_name, :email, :phone, :street, :city, :state, :zipcode)
+Attendee = Struct.new(
+  :first_name, 
+  :last_name, 
+  :email, 
+  :phone, 
+  :street, 
+  :city, 
+  :state, 
+  :zipcode
+  )
 
 class EventReporter
   attr_accessor :attendees
@@ -21,6 +30,7 @@ class EventReporter
     @parts
     @queue = Queue.new
     @help = YAML.load_file('help.yml')
+    @attendees = []
   end
 
   def load(file)
@@ -29,20 +39,27 @@ class EventReporter
     else
       file
     end
-    @attendees = []
+    csv_parser(file)
+  end
+
+  def csv_parser(file)
     @contents = CSV.open(file, :headers => true)
     @contents.each do |line|
-      first_name = FirstName.new(line["first_Name"]).to_s
-      last_name = LastName.new(line["last_Name"]).to_s
-      email = line["Email_Address"].to_s
-      phone = Phone.new(line["HomePhone"]).to_s
-      street = Street.new(line["Street"]).to_s
-      city = City.new(line["City"]).to_s
-      state = line["State"].to_s
-      zipcode = ZipCode.new(line["Zipcode"]).to_s
-      attendee = Attendee.new(first_name, last_name, email, phone, street, city, state, zipcode)
-      attendees << attendee
+      attendees << Attendee.new(*extract_attendee(line))
     end
+  end
+
+  def extract_attendee(line)
+    [
+      FirstName.new(line["first_Name"]).to_s,
+      LastName.new(line["last_Name"]).to_s,
+      line["Email_Address"].to_s,
+      Phone.new(line["HomePhone"]).to_s,
+      Street.new(line["Street"]).to_s,
+      City.new(line["City"]).to_s,
+      line["State"].to_s,
+      ZipCode.new(line["Zipcode"]).to_s
+    ]
   end
 
   def help(key)
@@ -54,15 +71,10 @@ class EventReporter
   end
 
   def find(attribute, criteria)
-    begin
-      @queue.add(attendees.select{|attendee| attendee.send(attribute).downcase == criteria.downcase})
-    rescue
-      if attendees == nil
-        puts "You have not loaded any data yet."
-      else
-        puts "There was a problem with your request."
-      end
+    result = attendees.select do |attendee| 
+      attendee.send(attribute).downcase == criteria.downcase 
     end
+    @queue.add(result)
   end
 
   def run
@@ -73,16 +85,20 @@ class EventReporter
       input = gets.chomp
       @parts = input.split(" ")
       command = @parts[0]
-      case command
-      when "quit" then puts "Exiting Event Reporter."
-      when "load" then load(@parts[1])
-      when "find" then find(@parts[1], @parts[2..-1].join(" "))
-      when "queue" then
-        queue_command = @parts[1]
-        process_queue_command(queue_command)
-      when "help" then help(@parts[1].to_s)
-      else puts "Sorry, I don't know how to '#{command}'"
-      end
+      process_command(command)
+    end
+  end
+
+  def process_command(command)
+    case command
+    when "quit" then puts "Exiting Event Reporter."
+    when "load" then load(@parts[1])
+    when "find" then find(@parts[1], @parts[2..-1].join(" "))
+    when "queue" then
+      queue_command = @parts[1]
+      process_queue_command(queue_command)
+    when "help" then help(@parts[1].to_s)
+    else puts "Sorry, I don't know how to '#{command}'"
     end
   end
 

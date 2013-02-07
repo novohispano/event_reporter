@@ -45,13 +45,15 @@ class Queue
     if queue_data == []
       puts "I am sorry, you don't have any data loaded to print."
     else
-      sorted_data = queue_data.sort {|attendee1, attendee2| attendee1.send(attribute) <=> attendee2.send(attribute)}
+      sorted_data = queue_data.sort do |attendee1, attendee2| 
+        attendee1.send(attribute) <=> attendee2.send(attribute)
+      end
       print_table(sorted_data)
     end
   end
 
   def print_table(contents)
-    puts " ".ljust(10, " ") + "LAST NAME".ljust(20, " ") + "FIRST NAME".ljust(15, " ") + "EMAIL".ljust(45, " ") + "ZIPCODE".ljust(10, " ") + "CITY"[0..20].ljust(25, " ") + "STATE".ljust(7, " ") + "ADDRESS".ljust(60, " ") + "PHONE".ljust(10, " ")
+    puts " ".ljust(10) + "LAST NAME".ljust(20) + "FIRST NAME".ljust(15) + "EMAIL".ljust(45) + "ZIPCODE".ljust(10) + "CITY"[0..20].ljust(25) + "STATE".ljust(7) + "ADDRESS".ljust(60) + "PHONE".ljust(10)
     id = 0
     contents.each do |attendee|
       id = id + 1
