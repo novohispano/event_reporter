@@ -3,15 +3,11 @@ class Street
 	attr_reader :street
 
 	def initialize(street)
-		@street = street
+		@street = street.to_s.tr("-.\(\),", "").titleize
 	end
 
 	def to_s
-		clean
-	end
-
-	def clean
-		@street = street.to_s.tr("-.\(\),", "").titleize
+		street
 	end
 
 	def <=>(other)

@@ -3,22 +3,22 @@ class ZipCode
 	attr_reader :zipcode
 
 	def initialize(zipcode)
-		@zipcode = zipcode
+		@zipcode = clean zipcode
 	end
 
 	def to_s
-		clean
+		zipcode
 	end
 
 	def <=>(other)
 		zipcode.to_s <=> other.zipcode.to_s
 	end
 
-	def clean
-		if @zipcode.nil?
+	def clean(zipcode)
+		if zipcode.nil?
 			"00000"
 		else
-			"0"*(5 - @zipcode.length) + @zipcode
+			"0"*(5 - zipcode.length) + zipcode
 		end
 	end
 end
