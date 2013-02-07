@@ -1,9 +1,14 @@
 require "csv"
 require "yaml"
 require "debugger"
+require "active_support/all"
 require_relative "phone"
 require_relative "zipcode"
+require_relative "street"
 require_relative "queue"
+require_relative "first_name"
+require_relative "last_name"
+require_relative "city"
 
 Attendee = Struct.new(:first_name, :last_name, :email, :phone, :street, :city, :state, :zipcode)
 
@@ -27,14 +32,14 @@ class EventReporter
 		@attendees = []
 		@contents = CSV.open(file, :headers => true)
 		@contents.each do |line|
-			first_name = line["first_Name"]
-			last_name = line["last_Name"]
-			email = line["Email_Address"]
-			phone = Phone.new(line["HomePhone"])
-			street = line["Street"].to_s
-			city = line["City"].to_s
+			first_name = FirstName.new(line["first_Name"]).to_s
+			last_name = LastName.new(line["last_Name"]).to_s
+			email = line["Email_Address"].to_s
+			phone = Phone.new(line["HomePhone"]).to_s
+			street = Street.new(line["Street"]).to_s
+			city = City.new(line["City"]).to_s
 			state = line["State"].to_s
-			zipcode = ZipCode.new(line["Zipcode"])
+			zipcode = ZipCode.new(line["Zipcode"]).to_s
 			attendee = Attendee.new(first_name, last_name, email, phone, street, city, state, zipcode)
 			attendees << attendee
 		end

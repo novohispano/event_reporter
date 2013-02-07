@@ -23,7 +23,7 @@ class Queue
 			puts "I am sorry, but you did not specify a file to save the data."
 		else
 			File.open(file, 'w') do |file|
-				file.puts "1,LAST NAME,FIRST NAME,EMAIL,ZIPCODE,CITY,STATE,ADDRESS,PHONE"
+				file.puts " ,last_Name,first_Name,Email_Address,Zipcode,City,State,Street,HomePhone"
 				id = 0
 				queue_data.each do |attendee|
 					id = id + 1
@@ -51,11 +51,11 @@ class Queue
 	end
 
 	def print_table(contents)
-		puts "1".ljust(10, " ") + "LAST NAME".ljust(20, " ") + "FIRST NAME".ljust(15, " ") + "EMAIL".ljust(45, " ") + "ZIPCODE".ljust(10, " ") + "CITY".ljust(25, " ") + "STATE".ljust(7, " ") + "ADDRESS".ljust(55, " ") + "PHONE".ljust(10, " ")
+		puts " ".ljust(10, " ") + "LAST NAME".ljust(20, " ") + "FIRST NAME".ljust(15, " ") + "EMAIL".ljust(45, " ") + "ZIPCODE".ljust(10, " ") + "CITY"[0..20].ljust(25, " ") + "STATE".ljust(7, " ") + "ADDRESS".ljust(60, " ") + "PHONE".ljust(10, " ")
 		id = 0
 		contents.each do |attendee|
 			id = id + 1
-			puts "#{id}".ljust(10) + "#{attendee.last_name}".ljust(20) + "#{attendee.first_name}"[0..10].ljust(15) + "#{attendee.email}".ljust(45) + "#{attendee.zipcode}".ljust(10) + "#{attendee.city}".ljust(25) + "#{attendee.state}".ljust(5) + "#{attendee.street}"[0..55].ljust(60) + "#{attendee.phone}".ljust(10)
+			puts "#{id}".ljust(10) + "#{attendee.last_name}".ljust(20) + "#{attendee.first_name}"[0..10].ljust(15) + "#{attendee.email}".ljust(45) + "#{attendee.zipcode}".ljust(10) + "#{attendee.city}"[0..20].ljust(25) + "#{attendee.state}".ljust(7) + "#{attendee.street}"[0..55].ljust(60) + "#{attendee.phone}".ljust(10)
 		end
 	end
 end
