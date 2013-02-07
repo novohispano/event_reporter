@@ -3,7 +3,7 @@ class FirstName
   attr_reader :first_name
 
   def initialize(first_name)
-    @first_name = first_name.to_s.titleize
+    @first_name = first_name.to_s.downcase.titleize
   end
 
   def to_s
