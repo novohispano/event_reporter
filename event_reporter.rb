@@ -55,7 +55,7 @@ class EventReporter
 
 	def find(attribute, criteria)
 		begin
-			@queue.add(attendees.select{|attendee| attendee.send(attribute) == criteria})
+			@queue.add(attendees.select{|attendee| attendee.send(attribute).downcase == criteria.downcase})
 		rescue
 			if attendees == nil
 				puts "You have not loaded any data yet."
