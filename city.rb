@@ -3,15 +3,11 @@ class City
   attr_reader :city
 
   def initialize(city)
-    @city = city
+    @city = city.to_s.tr("-.\(\),", "").titleize
   end
 
   def to_s
-    clean
-  end
-
-  def clean
-    @city = city.to_s.tr("-.\(\),", "").titleize
+    city
   end
 
   def <=>(other)

@@ -3,27 +3,27 @@ class Phone
   attr_reader :phone
 
   def initialize(phone)
-    @phone = phone.to_s.tr("-. \(\)", "")
+    @phone = clean phone.to_s.tr("-. \(\)", "")
   end
-  
+
   def to_s
-    clean
+    phone
   end
 
   def <=>(other)
     phone.to_s <=> other.phone.to_s
   end
 
-  def clean
-    phone_length = @phone.length
+  def clean(number)
+    phone_length = number.length
     case phone_length
     when 0..9
       invalid_number
     when 10
-      @phone
+      number
     when 11
-      if @phone[0] == "1"
-        @phone = @phone[1..-1]
+      if number[0] == "1"
+        number[1..-1]
       else
         invalid_number
       end
