@@ -39,6 +39,7 @@ class EventReporter
   end
 
   def csv_parser(file)
+    self.attendees = []
     @contents = CSV.open(file, :headers => true)
     @contents.each do |line|
       attendees << Attendee.new(*extract_attendee(line))

@@ -18,14 +18,30 @@ class Queue
     puts "The queue was cleared."
   end
 
+  def headers_save
+    [
+      "last_Name",
+      "first_Name",
+      "Email_Address",
+      "Zipcode",
+      "City",
+      "State",
+      "Street",
+      "HomePhone",
+    ]
+  end
+
   def save(file)
     if file == ""
       puts "I am sorry, but you did not specify a file to save the data."
     else
       File.open(file, 'w') do |file|
-        file.puts "last_Name,first_Name,Email_Address,Zipcode,City,State,Street,HomePhone"
+        file.puts headers_save.join(",")
         queue_data.each do |attendee|
-          file.puts "#{attendee.last_name},#{attendee.first_name},#{attendee.email},#{attendee.zipcode},#{attendee.city},#{attendee.state},#{attendee.street},#{attendee.phone}"
+          attendee.each do |attribute|
+            file.print attribute + ","
+          end
+          file.puts
         end
       end
     end
@@ -51,7 +67,6 @@ class Queue
   end
 
   def headers
-    headers = 
     [
       "LAST NAME",
       "FIRST NAME",
@@ -65,7 +80,6 @@ class Queue
   end
 
   def print_headers
-    headers
     headers.each do |header|
       Kernel.print header.ljust(25)
     end
