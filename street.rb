@@ -11,6 +11,6 @@ class Street
   end
 
   def <=>(other)
-    street.to_s <=> other.street.to_s
+    street <=> other.street
   end
 end

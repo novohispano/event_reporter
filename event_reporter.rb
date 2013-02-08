@@ -11,14 +11,14 @@ require_relative "last_name"
 require_relative "city"
 
 Attendee = Struct.new(
-  :first_name, 
-  :last_name, 
-  :email, 
-  :phone, 
-  :street, 
-  :city, 
-  :state, 
-  :zipcode
+  :last_name,
+  :first_name,
+  :email,
+  :zipcode,
+  :city,
+  :state,
+  :street,
+  :phone
   )
 
 class EventReporter
@@ -26,18 +26,14 @@ class EventReporter
 
   def initialize
     puts "Initializing Event Reporter..."
-    @contents
-    @parts
     @queue = Queue.new
     @help = YAML.load_file('help.yml')
     @attendees = []
   end
 
   def load(file)
-    if file == nil
+    if file.nil?
       file = "event_attendees.csv"
-    else
-      file
     end
     csv_parser(file)
   end
@@ -51,14 +47,14 @@ class EventReporter
 
   def extract_attendee(line)
     [
-      FirstName.new(line["first_Name"]).to_s,
       LastName.new(line["last_Name"]).to_s,
+      FirstName.new(line["first_Name"]).to_s,
       line["Email_Address"].to_s,
-      Phone.new(line["HomePhone"]).to_s,
-      Street.new(line["Street"]).to_s,
+      ZipCode.new(line["Zipcode"]).to_s,
       City.new(line["City"]).to_s,
       line["State"].to_s,
-      ZipCode.new(line["Zipcode"]).to_s
+      Street.new(line["Street"]).to_s,
+      Phone.new(line["HomePhone"]).to_s
     ]
   end
 

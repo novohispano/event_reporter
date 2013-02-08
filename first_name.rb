@@ -11,6 +11,6 @@ class FirstName
   end
 
   def <=>(other)
-    first_name.to_s <=> other.first_name.to_s
+    first_name <=> other.first_name
   end
 end

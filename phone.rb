@@ -11,7 +11,7 @@ class Phone
   end
 
   def <=>(other)
-    phone.to_s <=> other.phone.to_s
+    phone <=> other.phone
   end
 
   def clean(number)

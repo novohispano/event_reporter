@@ -11,7 +11,7 @@ class ZipCode
   end
 
   def <=>(other)
-    zipcode.to_s <=> other.zipcode.to_s
+    zipcode <=> other.zipcode
   end
 
   def clean(zipcode)

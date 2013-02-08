@@ -50,10 +50,35 @@ class Queue
     end
   end
 
+  def headers
+    headers = 
+    [
+      "LAST NAME",
+      "FIRST NAME",
+      "EMAIL",
+      "ZIPCODE",
+      "CITY",
+      "STATE",
+      "ADDRESS",
+      "PHONE"
+    ]
+  end
+
+  def print_headers
+    headers
+    headers.each do |header|
+      Kernel.print header.ljust(25)
+    end
+    puts
+  end
+
   def print_table(contents)
-    puts "LAST NAME".ljust(20) + "FIRST NAME".ljust(15) + "EMAIL".ljust(45) + "ZIPCODE".ljust(10) + "CITY"[0..20].ljust(25) + "STATE".ljust(7) + "ADDRESS".ljust(60) + "PHONE".ljust(10)
+    print_headers
     contents.each do |attendee|
-      puts "#{attendee.last_name}".ljust(20) + "#{attendee.first_name}"[0..10].ljust(15) + "#{attendee.email}".ljust(45) + "#{attendee.zipcode}".ljust(10) + "#{attendee.city}"[0..20].ljust(25) + "#{attendee.state}".ljust(7) + "#{attendee.street}"[0..55].ljust(60) + "#{attendee.phone}".ljust(10)
+      attendee.each do |attribute|
+        Kernel.print attribute[0..20].ljust(25)
+      end
+      puts
     end
   end
 end
